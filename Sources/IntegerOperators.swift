@@ -34,6 +34,7 @@ public func <- <T: SignedInteger>(left: inout T?, right: Map) {
 	}
 }
 
+#if !swift(>=4.2)
 /// ImplicitlyUnwrappedOptional SignedInteger mapping
 public func <- <T: SignedInteger>(left: inout T!, right: Map) {
 	switch right.mappingType {
@@ -45,6 +46,7 @@ public func <- <T: SignedInteger>(left: inout T!, right: Map) {
 	default: ()
 	}
 }
+#endif
 
 
 // MARK: - Unsigned Integer
@@ -74,6 +76,7 @@ public func <- <T: UnsignedInteger>(left: inout T?, right: Map) {
 	}
 }
 
+#if !swift(>=4.2)
 /// ImplicitlyUnwrappedOptional UnsignedInteger mapping
 public func <- <T: UnsignedInteger>(left: inout T!, right: Map) {
 	switch right.mappingType {
@@ -85,6 +88,7 @@ public func <- <T: UnsignedInteger>(left: inout T!, right: Map) {
 	default: ()
 	}
 }
+#endif
 
 // MARK: - Casting Utils
 
@@ -93,10 +97,10 @@ private func toSignedInteger<T: SignedInteger>(_ value: Any?) -> T? {
 	guard
 		let value = value,
 		case let number as NSNumber = value
-	else {
-		return nil
+		else {
+			return nil
 	}
-
+	
 	if T.self ==   Int.self, let x = Int(exactly: number.int64Value) {
 		return T.init(x)
 	}
@@ -112,7 +116,7 @@ private func toSignedInteger<T: SignedInteger>(_ value: Any?) -> T? {
 	if T.self == Int64.self, let x = Int64(exactly: number.int64Value) {
 		return T.init(x)
 	}
-
+	
 	return nil
 }
 
@@ -121,10 +125,10 @@ private func toUnsignedInteger<T: UnsignedInteger>(_ value: Any?) -> T? {
 	guard
 		let value = value,
 		case let number as NSNumber = value
-	else {
-		return nil
+		else {
+			return nil
 	}
-
+	
 	if T.self == UInt.self, let x = UInt(exactly: number.uint64Value) {
 		return T.init(x)
 	}
@@ -140,6 +144,6 @@ private func toUnsignedInteger<T: UnsignedInteger>(_ value: Any?) -> T? {
 	if T.self == UInt64.self, let x = UInt64(exactly: number.uint64Value) {
 		return T.init(x)
 	}
-
+	
 	return nil
 }
